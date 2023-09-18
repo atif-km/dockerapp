@@ -1,0 +1,31 @@
+version: '3'
+services:
+  # Spring Boot Application
+  app:
+    build:
+      context: .  # Use the current directory (where the Dockerfile is located)
+      dockerfile: Dockerfile  # Use the specified Dockerfile
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080"  # Map host port 8080 to container port 8080
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
+      - SPRING_DATASOURCE_USERNAME=yourdbusername
+      - SPRING_DATASOURCE_PASSWORD=yourdbpassword
+
+  # PostgreSQL Database
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=yourdbusername
+      - POSTGRES_PASSWORD=yourdbpassword
+    ports:
+      - "5432:5432"  # Map host port 5432 to container port 5432
+
+# Define a custom network for communication (optional)
+networks:
+  mynetwork:
